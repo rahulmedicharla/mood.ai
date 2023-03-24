@@ -1,4 +1,4 @@
-# AI_Gallery
+# mood.ai
 a program that creates an ai based art gallery of your current state. 
 
 How it works!
