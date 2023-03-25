@@ -1,7 +1,15 @@
 from visual_input import VideoInput
 from audio_input import AudioInput
-from visual_analysis import Detector
-import keyboard, os
+from visual_analysis import Visual_Analysis
+from audio_analysis import Audio_Analysis
+import keyboard, os, threading
+
+VIDEO_PATH = "video_file.mp4"
+AUDIO_PATH = "audio_file.wav"
+CONFIG_PATH = os.path.join("model_data", "ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt")
+MODEL_PATH = os.path.join("model_data", "frozen_inference_graph.pb")
+CLASSES_PATH = os.path.join("model_data", "coco.names")
+    
 
 def collect_input(video, audio):
     audio.start_audio()
@@ -15,14 +23,9 @@ def main():
     #init all objects
     video_obj = VideoInput()
     audio_obj = AudioInput()
-
-    video_path = "video_file.mp4"
-    config_path = os.path.join("model_data", "ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt")
-    model_path = os.path.join("model_data", "frozen_inference_graph.pb")
-    classes_path = os.path.join("model_data", "coco.names")
-    detector = Detector(video_path, config_path, model_path, classes_path)
+    visual_analysis_obj = Visual_Analysis(VIDEO_PATH, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
+    audio_analysis_obj = Audio_Analysis(AUDIO_PATH)
     
-
     #collecting inupt
     collect_input(video_obj, audio_obj)
 
@@ -32,8 +35,17 @@ def main():
             break;
     
     #running analysis
-    detector.start_analysis()
-    detector.printthing()
+    audio_analysis_thread = threading.Thread(target = audio_analysis_obj.start_analysis())
+    video_analysis_thread = threading.Thread(target = visual_analysis_obj.start_analysis())
+    
+    video_analysis_thread.start()
+    audio_analysis_thread.start()
+
+    audio_analysis_thread.join()
+    video_analysis_thread.join()
+
+    visual_analysis_obj.print_detected_objects()
+    audio_analysis_obj.print_transcription()
 
 
 main()

@@ -3,7 +3,7 @@ import numpy as np
 import threading
 
 np.random.seed(20)
-class Detector:
+class Visual_Analysis:
     def __init__(self, video_path, config_path, model_path, classes_path):
         #object detection inits
         self.video_path = video_path
@@ -82,8 +82,8 @@ class Detector:
         self.classes_list.insert(0, "__Background__")
 
         self.color_list = np.random.uniform(low = 0, high = 255, size = (len(self.classes_list), 3))
-
-    def printthing(self):
+    
+    def print_detected_objects(self):
         print(self.video_detected_objects)
 
     def start_analysis(self):
