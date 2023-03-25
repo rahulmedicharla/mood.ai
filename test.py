@@ -1,4 +1,4 @@
-from detector import Detector
+from visual_analysis import Detector
 import os
 
 def main():
