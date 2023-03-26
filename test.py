@@ -1,29 +1,9 @@
-import cv2
-from fer import FER, Video
+from transformers import pipeline
 
-emotion_detector = FER(mtcnn = True)
+sentiment_pipeline = pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
 
+data = ['I love how amazing you are at coding ']
 
-cap = cv2.VideoCapture('video_file.mp4')
+results = sentiment_pipeline(data)
 
-if cap.isOpened() == False:
-    print("error opening file")
-    
-
-emotion_list = []
-
-
-(success, image) = cap.read()
-
-while success:
-    dominant_emotion, emotion_score = emotion_detector.top_emotion(image)
-
-    if dominant_emotion not in emotion_list:
-        emotion_list.append(dominant_emotion)
-
-    key = cv2.waitKey(1)
-
-    (success, image) = cap.read()
-cv2.destroyAllWindows()
-
-print(emotion_list)
+print(results)
