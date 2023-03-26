@@ -107,7 +107,7 @@ class Visual_Analysis:
 
         self.color_list = np.random.uniform(low = 0, high = 255, size = (len(self.classes_list), 3))
     
-    def print_results(self):
+    def print_video_results(self):
         print(self.video_detected_objects)
         print(self.video_detected_emotions)
 

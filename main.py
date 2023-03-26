@@ -44,8 +44,8 @@ def main():
     audio_analysis_thread.join()
     video_analysis_thread.join()
 
-    visual_analysis_obj.print_results()
-    audio_analysis_obj.print_transcription()
+    visual_analysis_obj.print_video_results()
+    audio_analysis_obj.print_audio_results()
 
 
 main()
