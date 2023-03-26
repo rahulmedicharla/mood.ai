@@ -21,6 +21,7 @@ def terminate_input(video, audio):
 
 def main():
     #init all objects
+    print('Initializing objects, getting ready to run...')
     video_obj = VideoInput()
     audio_obj = AudioInput()
     visual_analysis_obj = Visual_Analysis(VIDEO_PATH, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
@@ -33,6 +34,8 @@ def main():
         if keyboard.is_pressed('q'):
             terminate_input(video_obj, audio_obj)
             break;
+    
+    print('Analyzing data...')
     
     #running analysis
     audio_analysis_thread = threading.Thread(target = audio_analysis_obj.start_analysis())
