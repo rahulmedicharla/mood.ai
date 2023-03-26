@@ -1,6 +1,7 @@
 import cv2
 import numpy as np 
 import threading
+from fer import FER
 
 np.random.seed(20)
 class Visual_Analysis:
@@ -17,15 +18,20 @@ class Visual_Analysis:
         self.net.setInputMean((127.5,127.5,127.5))
         self.net.setInputSwapRB(True)
 
-        #custom inits
+        #emotion detection inits
+        self.emotion_detector = FER(mtcnn = True)
+
+        #data inits
         self.video_detected_objects = []
+        self.video_detected_emotions = []
         self.read_classes()
 
     def detect_objects(self):
+        #uncomment to see analysis
         cap = cv2.VideoCapture(self.video_path)
 
         if cap.isOpened() == False:
-            print("error opening file")
+            print("error opening file object detection")
             return
         
         (success, image) = cap.read()
@@ -57,20 +63,40 @@ class Visual_Analysis:
 
                     x,y,w,h = bbox
 
-                    cv2.rectangle(image, (x,y), (x+w, y+h), color=class_color, thickness = 1)
-                    cv2.putText(image, display_text, (x,y-10), cv2.FONT_HERSHEY_PLAIN, 1, class_color, 2)
+                    #cv2.rectangle(image, (x,y), (x+w, y+h), color=class_color, thickness = 1)
+                    #cv2.putText(image, display_text, (x,y-10), cv2.FONT_HERSHEY_PLAIN, 1, class_color, 2)
 
             
             for x in frame_object_list:
                 if x not in self.video_detected_objects:
                     self.video_detected_objects.append(x)
             
-            cv2.imshow("Result", image)
+            #cv2.imshow("Result", image)
             
             key = cv2.waitKey(1)
 
             (success, image) = cap.read()
         cv2.destroyAllWindows()
+    
+    def detect_emotions(self):
+        cap = cv2.VideoCapture(self.video_path)
+
+        if cap.isOpened() == False:
+            print('error opening file emotion')
+        
+        (success, image) = cap.read()
+
+        while success:
+            dominant_emotion, emotion_score = self.emotion_detector.top_emotion(image)
+
+            if dominant_emotion not in self.video_detected_emotions:
+                self.video_detected_emotions.append(dominant_emotion)
+
+            key = cv2.waitKey(1)
+
+            (success, image) = cap.read()
+        cv2.destroyAllWindows()
+
 
 
     def read_classes(self):
@@ -81,10 +107,20 @@ class Visual_Analysis:
 
         self.color_list = np.random.uniform(low = 0, high = 255, size = (len(self.classes_list), 3))
     
-    def print_detected_objects(self):
+    def print_results(self):
         print(self.video_detected_objects)
+        print(self.video_detected_emotions)
 
     def start_analysis(self):
-        obj_detection_thread = threading.Thread(target=self.detect_objects)
-        obj_detection_thread.start()
-        obj_detection_thread.join()
+        try:
+            obj_detection_thread = threading.Thread(target=self.detect_objects)
+            emotion_detection_thread = threading.Thread(target=self.detect_emotions)
+            
+            obj_detection_thread.start()
+            emotion_detection_thread.start()
+
+            obj_detection_thread.join()
+            emotion_detection_thread.join()
+        except Exception as e:
+            print(e)
+

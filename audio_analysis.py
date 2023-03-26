@@ -11,7 +11,8 @@ class Audio_Analysis:
     def transcribe_audio(self):
         openai.api_key = keys.openaikey
         audio_file = open(self.audio_path, "rb")
-        self.transcription = openai.Audio.transcribe("whisper-1", audio_file)
+        transcription = openai.Audio.transcribe("whisper-1", audio_file)
+        self.transcription = transcription["text"]
 
     def print_transcription(self):
         print(self.transcription)
