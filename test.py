@@ -1,9 +1,16 @@
-from transformers import pipeline
+from transformers import RobertaTokenizerFast, TFRobertaForSequenceClassification, pipeline
 
-sentiment_pipeline = pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
+tokenizer = RobertaTokenizerFast.from_pretrained("arpanghoshal/EmoRoBERTa")
+model = TFRobertaForSequenceClassification.from_pretrained("arpanghoshal/EmoRoBERTa")
 
-data = ['I love how amazing you are at coding ']
+emotion = pipeline('sentiment-analysis', 
+                    model='arpanghoshal/EmoRoBERTa')
 
-results = sentiment_pipeline(data)
+emotion_labels = emotion(["Thanks for giving me the time to explain why I am a good fit for this opportunity"," I feel you will be pleased with the results", "Thanks for giving me the time to explain why I am a good fit for this opportunity"])
+
+results = []
+for sentence in emotion_labels:
+    if sentence['label'] not in results:
+        results.append(sentence['label'])
 
 print(results)
