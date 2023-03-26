@@ -67,9 +67,7 @@ class Visual_Analysis:
             
             cv2.imshow("Result", image)
             
-            key = cv2.waitKey(1) & 0xFF
-            if key == ord('q'):
-                break
+            key = cv2.waitKey(1)
 
             (success, image) = cap.read()
         cv2.destroyAllWindows()
