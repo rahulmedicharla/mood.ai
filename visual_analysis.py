@@ -31,6 +31,8 @@ class Visual_Analysis:
         self.video_detected_objects = []
         self.video_detected_emotions = []
         self.video_classification = []
+        self.video_top_colors = []
+
         self.read_classes()
 
     def detect_objects(self):
@@ -124,6 +126,39 @@ class Visual_Analysis:
             (success, image) = cap.read()
         cv2.destroyAllWindows()
     
+    def detect_colors(self):
+        cap = cv2.VideoCapture(self.video_path)
+
+        if cap.isOpened() == False:
+            print('error opening file color detection')
+
+        (success, image) = cap.read()
+
+        while success:
+            pil_image = Image.fromarray(image)
+
+            res = pil_image.getcolors(pil_image.size[0] * pil_image.size[1])
+
+            sorted_colors = sorted(res, key = lambda x:x[0], reverse=True)
+
+            top_colors = sorted_colors[:3]
+
+            rgb_colors = [c[1] for c in top_colors]
+
+            if rgb_colors[0] not in self.video_top_colors:
+                self.video_top_colors.append(rgb_colors[0])
+            if rgb_colors[1] not in self.video_top_colors:
+                self.video_top_colors.append(rgb_colors[1])
+            if rgb_colors[2] not in self.video_top_colors:
+                self.video_top_colors.append(rgb_colors[2])
+
+            key = cv2.waitKey(1)
+
+            (success, image) = cap.read()
+        cv2.destroyAllWindows()
+
+
+    
     def read_classes(self):
         with open(self.classes_path, 'r') as f:
             self.classes_list = f.read().splitlines()
@@ -136,20 +171,24 @@ class Visual_Analysis:
         print(self.video_detected_objects)
         print(self.video_detected_emotions)
         print(self.video_classification)
+        print(self.video_top_colors)
 
     def start_analysis(self):
         try:
             obj_detection_thread = threading.Thread(target=self.detect_objects)
             emotion_detection_thread = threading.Thread(target=self.detect_emotions)
             #image_classification_thread = threading.Thread(target=self.classify_video)
+            color_detection_thread = threading.Thread(target=self.detect_colors)
             
             obj_detection_thread.start()
             emotion_detection_thread.start()
             #image_classification_thread.start()
+            color_detection_thread.start()
 
             obj_detection_thread.join()
             emotion_detection_thread.join()
             #image_classification_thread.join()
+            color_detection_thread.join()
         except Exception as e:
             print(e)
 
