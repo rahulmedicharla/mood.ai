@@ -15,8 +15,10 @@ image classification
 audio transcription
 sentiment analysis
 emotion detection from text
+identifying keywords from text
 
 things to download
 venv
 ffmpeg.exe
 openapi key
+python -m spacy download en_core_web_sm
