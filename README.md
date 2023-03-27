@@ -22,7 +22,7 @@ There are some preliminary steps that first must be completed in order for you t
 2. Generate a virtual environment for this program running this in your terminal,
 ```python -m venv myenv```
 3. Activate virtual environment by running
-```source myenv/bin/activate``` on MacOs or Linux, and 
+```source myenv/bin/activate``` on MacOs or Linux, or 
 ```source myenv/Scripts/activate``` on Windows
 4. Everytime you want to run the program, make sure to activate the virtual environment as this is where all the dependencies for the project will live
 5. Install all dependecies for the project in your virtual environment by running 
