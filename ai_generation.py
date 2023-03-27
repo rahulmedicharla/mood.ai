@@ -8,6 +8,8 @@ class Generation:
         self.chat_response = ""
         self.video_analysis = video
         self.audio_analysis = audio
+        self.dalle_prompts = []
+        self.image_links = []
 
     def generate_chat_prompts(self):
         emotion_list = list(set(self.video_analysis.video_detected_emotions + self.audio_analysis.emotion_detection))
@@ -27,18 +29,15 @@ class Generation:
         self.chat_response = completion.choices[0].message.content
     
     def generate_images(self):
-        prompts = ast.literal_eval(self.chat_response)
-        print(prompts)
+        self.dalle_prompts = ast.literal_eval(self.chat_response)
 
         openai.api_key = self.openaikey
 
-        f = open("output.txt", 'a')
-        for prompt in prompts:
+        for prompt in self.dalle_prompts:
             image = openai.Image.create(
                 prompt = prompt,
                 n=1,
                 size = "256x256"
             )
-            f.write(image["data"][0]["url"] + "\n")
-
-        f.close()
+            self.image_links.append(image["data"][0]["url"])
+            

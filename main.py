@@ -3,6 +3,7 @@ from audio_input import AudioInput
 from visual_analysis import Visual_Analysis
 from audio_analysis import Audio_Analysis
 from ai_generation import Generation
+from generate_webpage import WebBrowser
 import keyboard, os, threading
 
 VIDEO_PATH = "video_file.mp4"
@@ -49,13 +50,14 @@ def main():
     audio_analysis_thread.join()
     video_analysis_thread.join()
 
-    visual_analysis_obj.print_video_results()
-    audio_analysis_obj.print_audio_results()
-
     #generate output
     print('Creating output...')
     ai_generation.generate_chat_prompts()
     ai_generation.generate_images()
+
+    #create webpage
+    web_browser = WebBrowser(ai_generation)
+    web_browser.create_webpage()
 
 
 
