@@ -112,9 +112,11 @@ class Visual_Analysis:
         if cap.isOpened() == False:
             print('error opening file image classification')
 
-        (success, image) = cap.read()
-
-        while success:
+        
+        for i in range(0,5):
+            cap.set(cv2.CAP_PROP_POS_FRAMES, cap.get(cv2.CAP_PROP_FRAME_COUNT) - 1)
+            success, image = cap.read()
+        
             pil_image = Image.fromarray(image)
 
             classification = self.image_classification(pil_image)
@@ -123,7 +125,6 @@ class Visual_Analysis:
 
             key = cv2.waitKey(1)
 
-            (success, image) = cap.read()
         cv2.destroyAllWindows()
     
     def detect_colors(self):
@@ -168,27 +169,27 @@ class Visual_Analysis:
         self.color_list = np.random.uniform(low = 0, high = 255, size = (len(self.classes_list), 3))
     
     def print_video_results(self):
-        print(self.video_detected_objects)
-        print(self.video_detected_emotions)
-        print(self.video_classification)
-        print(self.video_top_colors)
+        print("Objects Detected: " + str(self.video_detected_objects))
+        print("Emotions detected:" + str(self.video_detected_emotions))
+        print("Classification: " + str(self.video_classification))
+        print("Top Colors: " + str(self.video_top_colors))
 
     def start_analysis(self):
         try:
             obj_detection_thread = threading.Thread(target=self.detect_objects)
             emotion_detection_thread = threading.Thread(target=self.detect_emotions)
-            #image_classification_thread = threading.Thread(target=self.classify_video)
+            image_classification_thread = threading.Thread(target=self.classify_video)
             color_detection_thread = threading.Thread(target=self.detect_colors)
             
             obj_detection_thread.start()
             emotion_detection_thread.start()
-            #image_classification_thread.start()
+            image_classification_thread.start()
             color_detection_thread.start()
 
             obj_detection_thread.join()
             emotion_detection_thread.join()
-            #image_classification_thread.join()
+            image_classification_thread.join()
             color_detection_thread.join()
         except Exception as e:
-            print(e)
+            print("Exception: " + e)
 

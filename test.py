@@ -1,37 +1,28 @@
 import cv2
 from PIL import Image
+from transformers import pipeline
+
+image_classification = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
 
 cap = cv2.VideoCapture("video_file.mp4")
 
 if cap.isOpened() == False:
     print('error opening file image classification')
 
-(success, image) = cap.read()
 
 list = []
+for i in range(0,5):
+    print('running')
+    cap.set(cv2.CAP_PROP_POS_FRAMES, cap.get(cv2.CAP_PROP_FRAME_COUNT) - 1)
+    success, image = cap.read()
 
-while success:
     pil_image = Image.fromarray(image)
 
-    res = pil_image.getcolors(pil_image.size[0] * pil_image.size[1])
-
-    sorted_colors = sorted(res, key = lambda x:x[0], reverse=True)
-
-    top_colors = sorted_colors[:3]
-
-    rgb_colors = [c[1] for c in top_colors]
-
-    if rgb_colors[0] not in list:
-        list.append(rgb_colors[0])
-    if rgb_colors[1] not in list:
-        list.append(rgb_colors[1])
-    if rgb_colors[2] not in list:
-        list.append(rgb_colors[2])
+    classification = image_classification(pil_image)
+    if classification[0]['generated_text'] not in list:
+            list.append(classification[0]['generated_text'])
 
     key = cv2.waitKey(1)
 
-    (success, image) = cap.read()
-cv2.destroyAllWindows()
-
 print(list)
-
+cv2.destroyAllWindows()
