@@ -10,6 +10,9 @@ class Audio_Analysis:
         self.sentiment_analysis_pipeline = pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
         self.emotion_detection_pipeline = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
 
+        #whisper inits
+        self.openaikey = keys.openaikey
+
         #data inits
         self.audio_path = audio_path
         self.transcription = []
@@ -17,7 +20,7 @@ class Audio_Analysis:
         self.emotion_detection = []
     
     def transcribe_audio(self):
-        openai.api_key = keys.openaikey
+        openai.api_key = self.openaikey
         audio_file = open(self.audio_path, "rb")
         transcription = openai.Audio.transcribe("whisper-1", audio_file)
         self.transcription = transcription["text"].split('.')

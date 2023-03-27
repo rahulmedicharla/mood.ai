@@ -2,6 +2,7 @@ from visual_input import VideoInput
 from audio_input import AudioInput
 from visual_analysis import Visual_Analysis
 from audio_analysis import Audio_Analysis
+from ai_generation import Generation
 import keyboard, os, threading
 
 VIDEO_PATH = "video_file.mp4"
@@ -26,6 +27,7 @@ def main():
     audio_obj = AudioInput()
     visual_analysis_obj = Visual_Analysis(VIDEO_PATH, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
     audio_analysis_obj = Audio_Analysis(AUDIO_PATH)
+    ai_generation = Generation(visual_analysis_obj, audio_analysis_obj)
     
     #collecting inupt
     collect_input(video_obj, audio_obj)
@@ -47,8 +49,11 @@ def main():
     audio_analysis_thread.join()
     video_analysis_thread.join()
 
-    visual_analysis_obj.print_video_results()
-    audio_analysis_obj.print_audio_results()
+    #generate output
+    print('creating output')
+    ai_generation.generate_chat_prompts()
+    ai_generation.generate_images()
+
 
 
 main()
