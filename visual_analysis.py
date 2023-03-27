@@ -2,6 +2,9 @@ import cv2
 import numpy as np 
 import threading
 from fer import FER
+from transformers import pipeline
+from PIL import Image
+
 
 np.random.seed(20)
 class Visual_Analysis:
@@ -21,9 +24,13 @@ class Visual_Analysis:
         #emotion detection inits
         self.emotion_detector = FER(mtcnn = True)
 
+        #image classification inits
+        self.image_classification = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
+
         #data inits
         self.video_detected_objects = []
         self.video_detected_emotions = []
+        self.video_classification = []
         self.read_classes()
 
     def detect_objects(self):
@@ -89,7 +96,7 @@ class Visual_Analysis:
         while success:
             dominant_emotion, emotion_score = self.emotion_detector.top_emotion(image)
 
-            if dominant_emotion not in self.video_detected_emotions:
+            if dominant_emotion not in self.video_detected_emotions and dominant_emotion != None:
                 self.video_detected_emotions.append(dominant_emotion)
 
             key = cv2.waitKey(1)
@@ -97,6 +104,26 @@ class Visual_Analysis:
             (success, image) = cap.read()
         cv2.destroyAllWindows()
 
+    def classify_video(self):
+        cap = cv2.VideoCapture(self.video_path)
+
+        if cap.isOpened() == False:
+            print('error opening file image classification')
+
+        (success, image) = cap.read()
+
+        while success:
+            pil_image = Image.fromarray(image)
+
+            classification = self.image_classification(pil_image)
+            if classification[0]['generated_text'] not in self.video_classification:
+                    self.video_classification.append(classification[0]['generated_text'])
+
+            key = cv2.waitKey(1)
+
+            (success, image) = cap.read()
+        cv2.destroyAllWindows()
+    
     def read_classes(self):
         with open(self.classes_path, 'r') as f:
             self.classes_list = f.read().splitlines()
@@ -108,17 +135,21 @@ class Visual_Analysis:
     def print_video_results(self):
         print(self.video_detected_objects)
         print(self.video_detected_emotions)
+        print(self.video_classification)
 
     def start_analysis(self):
         try:
             obj_detection_thread = threading.Thread(target=self.detect_objects)
             emotion_detection_thread = threading.Thread(target=self.detect_emotions)
+            #image_classification_thread = threading.Thread(target=self.classify_video)
             
             obj_detection_thread.start()
             emotion_detection_thread.start()
+            #image_classification_thread.start()
 
             obj_detection_thread.join()
             emotion_detection_thread.join()
+            #image_classification_thread.join()
         except Exception as e:
             print(e)
 
