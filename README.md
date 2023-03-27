@@ -7,6 +7,15 @@ How it works!
 3. Runs those through a sentiment analysis to understand internal emotions and state
 4. generates AI images that represent your state
 
+things I did
+parallel video and audio recording
+multi object detection
+facial emotion detection
+image classification
+audio transcription
+sentiment analysis
+emotion detection from text
+
 things to download
 venv
 ffmpeg.exe

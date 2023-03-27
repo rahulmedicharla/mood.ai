@@ -1,16 +1,33 @@
-from transformers import RobertaTokenizerFast, TFRobertaForSequenceClassification, pipeline
+from transformers import pipeline
+import cv2
+from PIL import Image 
+from sentence_transformers import SentenceTransformer, util
+import torch
 
-tokenizer = RobertaTokenizerFast.from_pretrained("arpanghoshal/EmoRoBERTa")
-model = TFRobertaForSequenceClassification.from_pretrained("arpanghoshal/EmoRoBERTa")
+model = SentenceTransformer('distilbert-base-nli-mean-tokens')
 
-emotion = pipeline('sentiment-analysis', 
-                    model='arpanghoshal/EmoRoBERTa')
+image_to_text = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
 
-emotion_labels = emotion(["Thanks for giving me the time to explain why I am a good fit for this opportunity"," I feel you will be pleased with the results", "Thanks for giving me the time to explain why I am a good fit for this opportunity"])
+cap = cv2.VideoCapture("video_file.mp4")
 
-results = []
-for sentence in emotion_labels:
-    if sentence['label'] not in results:
-        results.append(sentence['label'])
+if cap.isOpened() == False:
+    print('error opening file emotion')
 
-print(results)
+(success, image) = cap.read()
+
+res = []
+similar = []
+while success:
+    pil_image = Image.fromarray(image)
+
+    temp = image_to_text(pil_image)
+    if temp[0]['generated_text'] not in res:
+            res.append(temp[0]['generated_text'])
+
+    key = cv2.waitKey(1)
+
+    (success, image) = cap.read()
+
+cv2.destroyAllWindows()
+
+print(res)

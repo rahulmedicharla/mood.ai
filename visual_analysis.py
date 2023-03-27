@@ -97,8 +97,6 @@ class Visual_Analysis:
             (success, image) = cap.read()
         cv2.destroyAllWindows()
 
-
-
     def read_classes(self):
         with open(self.classes_path, 'r') as f:
             self.classes_list = f.read().splitlines()
