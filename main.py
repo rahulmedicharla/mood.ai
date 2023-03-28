@@ -50,6 +50,9 @@ def main():
     audio_analysis_thread.join()
     video_analysis_thread.join()
 
+    #visual_analysis_obj.print_video_results()
+    #audio_analysis_obj.print_audio_results()
+
     #generate output
     print('Creating output...')
     ai_generation.generate_chat_prompts()
