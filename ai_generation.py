@@ -22,6 +22,8 @@ class Generation:
 
     def generate_chat_prompts(self):
         emotion_list = list(set(self.video_analysis.video_detected_emotions + self.audio_analysis.emotion_detection))
+        if 'sad' in emotion_list:
+            emotion_list.remove('sad')
 
         openai.api_key = self.openaikey
 
