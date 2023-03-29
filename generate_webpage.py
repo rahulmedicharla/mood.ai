@@ -24,7 +24,7 @@ class WebBrowser:
         #add content:
         f = open('output.html', 'a')
         for link in self.image_links:
-            f.write("<img src=" + link + "width = '500px' height = '500px'></img>")
+            f.write("<img src=" + link + " width = '500px' height = '500px'></img>")
             f.write('<br><br>')
 
         f.write(self.html_ending)

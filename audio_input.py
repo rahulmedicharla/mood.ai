@@ -1,8 +1,6 @@
 import threading, pyaudio, wave
 
 class AudioInput:
-    counter = 0
-
     def __init__(self):
         self.open = True
         self.rate = 44100

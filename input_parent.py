@@ -1,22 +1,24 @@
 import tkinter as tk
-import cv2
 from PIL import Image, ImageTk
+from visual_input import VideoInput
+from audio_input import AudioInput
+import cv2, threading
 
-class CameraApp:
-    def __init__(self, video_source=0):
 
-        self.cap = cv2.VideoCapture(video_source)
-        if not self.cap.isOpened():
-            raise ValueError("Unable to open camera")
+class InputParent:
+    def __init__(self):
 
-        self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        #visual and audio recording inits
+        self.video_input = VideoInput()
+        self.audio_input = AudioInput()
 
         self.is_recording = False
+        self.is_open = True
         self.start_time = 0
 
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        self.video_write_object = cv2.VideoWriter('video_file.mp4', fourcc, 10.0, (640, 480))
+        #tkinter inits
+        self.width = int(self.video_input.FRAME_WIDTH)
+        self.height = int(self.video_input.FRAME_HEIGHT)
 
         self.root = tk.Tk()
         self.root.title("mood.ai")
@@ -43,33 +45,34 @@ class CameraApp:
     def toggle_recording(self):
         self.is_recording = True
         self.start_time = cv2.getTickCount()
+        self.audio_input.start_audio()
 
     def stop_recording(self):
-        self.is_recording = False;
-        if self.cap.isOpened():
-            self.cap.release()
-        self.video_write_object.release()
-        cv2.destroyAllWindows()
-        self.root.quit()
-
+        try:
+            self.video_input.stop_video()
+            self.audio_input.stop_audio()
+            self.root.destroy()
+            self.is_open = False
+        except Exception as e:
+            print(e)
 
     def update(self):
-        ret, frame = self.cap.read()
+        ret, frame = self.video_input.collect_frame()
         if ret:
-            frame = cv2.flip(frame, 1)
            
             image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             photo = ImageTk.PhotoImage(image=Image.fromarray(image))
             self.canvas.create_image(0, 0, image=photo, anchor=tk.NW)
 
-            if self.is_recording: 
-                self.video_write_object.write(frame)
+            #record items being 
+            if self.is_recording:
+                #write video frame
+                self.video_input.write_frame(frame)
+
+                #collect and write audio frame
 
                 if (cv2.getTickCount() - self.start_time)/cv2.getTickFrequency() > 5:
                     self.stop_recording()
 
         self.root.update()
         self.root.after(0, self.update)
-
-
-app = CameraApp()

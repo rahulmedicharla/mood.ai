@@ -1,10 +1,9 @@
-from visual_input import VideoInput
-from audio_input import AudioInput
+from input_parent import InputParent
 from visual_analysis import Visual_Analysis
 from audio_analysis import Audio_Analysis
 from ai_generation import Generation
 from generate_webpage import WebBrowser
-import keyboard, os, threading
+import keyboard, os, threading, time
 
 VIDEO_PATH = "video_file.mp4"
 AUDIO_PATH = "audio_file.wav"
@@ -13,10 +12,6 @@ MODEL_PATH = os.path.join("model_data", "frozen_inference_graph.pb")
 CLASSES_PATH = os.path.join("model_data", "coco.names")
     
 
-def collect_input(video, audio):
-    audio.start_audio()
-    video.start_video()
-
 def terminate_input(video, audio):
     video.stop_video()
     audio.stop_audio()
@@ -24,20 +19,13 @@ def terminate_input(video, audio):
 def main():
     #init all objects
     print('Initializing objects, getting ready to run...')
-    video_obj = VideoInput()
-    audio_obj = AudioInput()
     visual_analysis_obj = Visual_Analysis(VIDEO_PATH, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
     audio_analysis_obj = Audio_Analysis(AUDIO_PATH)
     ai_generation = Generation(visual_analysis_obj, audio_analysis_obj)
     
     #collecting inupt
-    collect_input(video_obj, audio_obj)
+    InputParent()    
 
-    while True:
-        if keyboard.is_pressed('q'):
-            terminate_input(video_obj, audio_obj)
-            break;
-    
     print('Analyzing data...')
     
     #running analysis
