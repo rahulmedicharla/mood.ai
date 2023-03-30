@@ -12,6 +12,7 @@ class InputParent:
         self.video_input = VideoInput()
         self.audio_input = AudioInput()
 
+        self.RECORDING_LENGTH = 5
         self.is_recording = False
         self.is_open = True
         self.start_time = 0
@@ -44,6 +45,7 @@ class InputParent:
 
     def toggle_recording(self):
         self.is_recording = True
+        self.record_button.pack_forget()
         self.start_time = cv2.getTickCount()
         self.audio_input.start_audio()
 
@@ -64,14 +66,14 @@ class InputParent:
             photo = ImageTk.PhotoImage(image=Image.fromarray(image))
             self.canvas.create_image(0, 0, image=photo, anchor=tk.NW)
 
-            #record items being 
+            #record items being recorded
             if self.is_recording:
                 #write video frame
                 self.video_input.write_frame(frame)
 
                 #collect and write audio frame
 
-                if (cv2.getTickCount() - self.start_time)/cv2.getTickFrequency() > 5:
+                if (cv2.getTickCount() - self.start_time)/cv2.getTickFrequency() > self.RECORDING_LENGTH:
                     self.stop_recording()
 
         self.root.update()

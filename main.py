@@ -10,11 +10,10 @@ AUDIO_PATH = "audio_file.wav"
 CONFIG_PATH = os.path.join("model_data", "ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt")
 MODEL_PATH = os.path.join("model_data", "frozen_inference_graph.pb")
 CLASSES_PATH = os.path.join("model_data", "coco.names")
-    
 
-def terminate_input(video, audio):
-    video.stop_video()
-    audio.stop_audio()
+def clean_up():
+    os.remove('video_file.mp4')
+    os.remove('audio_file.wav')
 
 def main():
     #init all objects
@@ -50,6 +49,7 @@ def main():
     web_browser = WebBrowser(ai_generation)
     web_browser.create_webpage()
 
+    clean_up()
 
 
 main()

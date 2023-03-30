@@ -23,7 +23,3 @@ class VideoInput:
         self.video_capture_object.release()
         self.video_write_object.release()
         cv2.destroyAllWindows();
-
-    def start_video(self):
-        video_thread = threading.Thread(target=self.collect_video)
-        video_thread.start()

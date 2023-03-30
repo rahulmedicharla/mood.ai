@@ -90,7 +90,9 @@ class Visual_Analysis:
         cv2.destroyAllWindows()
 
         most_common_objects = Counter(detected_objects).most_common(3)
-        self.video_detected_objects = [most_common_objects[0][0], most_common_objects[1][0], most_common_objects[2][0]]
+        for object in most_common_objects:
+            print(object[0])
+            self.video_detected_objects.append(object[0])
     
     def detect_emotions(self):
         cap = cv2.VideoCapture(self.video_path)
@@ -113,8 +115,9 @@ class Visual_Analysis:
         cv2.destroyAllWindows()
 
         most_common_emotions = Counter(emotions_detected).most_common(2)
-        self.video_detected_emotions = [most_common_emotions[0][0], most_common_emotions[1][0]]
-
+        for emotion in most_common_emotions:
+            self.video_detected_emotions.append(emotion[0])
+        
     def classify_video(self):
         cap = cv2.VideoCapture(self.video_path)
 
