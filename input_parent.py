@@ -2,7 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from visual_input import VideoInput
 from audio_input import AudioInput
-import cv2, threading
+import cv2
 
 
 class InputParent:

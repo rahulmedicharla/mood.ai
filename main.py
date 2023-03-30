@@ -44,7 +44,7 @@ def main():
     #generate output
     print('Creating output...')
     ai_generation.generate_chat_prompts()
-    ai_generation.generate_images()
+    ai_generation.create_images()
 
     #create webpage
     web_browser = WebBrowser(ai_generation)
