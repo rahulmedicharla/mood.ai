@@ -7,10 +7,10 @@ class WebBrowser:
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Art Gallery</title>
+            <title>mood.ai art gallery</title>
             <style>
                 body {
-                    background-color: #f5f5f5;
+                    background-color: #F2E8E8;
                     font-family: Arial, sans-serif;
                     color: #333;
                     margin: 0;

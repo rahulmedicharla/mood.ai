@@ -4,6 +4,7 @@ import threading
 from fer import FER
 from transformers import pipeline
 from PIL import Image
+from collections import Counter
 
 
 np.random.seed(20)
@@ -45,6 +46,8 @@ class Visual_Analysis:
         
         (success, image) = cap.read()
 
+        detected_objects = []
+
         while success:
             class_label_ids, confidence, bboxs = self.net.detect(image, confThreshold = 0.5)
 
@@ -77,8 +80,7 @@ class Visual_Analysis:
 
             
             for x in frame_object_list:
-                if x not in self.video_detected_objects:
-                    self.video_detected_objects.append(x)
+                detected_objects.append(x)
             
             #cv2.imshow("Result", image)
             
@@ -86,6 +88,9 @@ class Visual_Analysis:
 
             (success, image) = cap.read()
         cv2.destroyAllWindows()
+
+        most_common_objects = Counter(detected_objects).most_common(3)
+        self.video_detected_objects = [most_common_objects[0][0], most_common_objects[1][0], most_common_objects[2][0]]
     
     def detect_emotions(self):
         cap = cv2.VideoCapture(self.video_path)
@@ -95,16 +100,20 @@ class Visual_Analysis:
         
         (success, image) = cap.read()
 
+        emotions_detected = []
+
         while success:
             dominant_emotion, emotion_score = self.emotion_detector.top_emotion(image)
 
-            if dominant_emotion not in self.video_detected_emotions and dominant_emotion != None:
-                self.video_detected_emotions.append(dominant_emotion)
+            emotions_detected.append(dominant_emotion)
 
             key = cv2.waitKey(1)
 
             (success, image) = cap.read()
         cv2.destroyAllWindows()
+
+        most_common_emotions = Counter(emotions_detected).most_common(2)
+        self.video_detected_emotions = [most_common_emotions[0][0], most_common_emotions[1][0]]
 
     def classify_video(self):
         cap = cv2.VideoCapture(self.video_path)
