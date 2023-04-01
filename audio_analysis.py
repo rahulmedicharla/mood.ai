@@ -2,6 +2,8 @@ import openai
 import threading, keys
 from transformers import pipeline
 import spacy
+import numpy as np
+from scipy.io.wavfile import read
 
 class Audio_Analysis:
 
@@ -21,6 +23,7 @@ class Audio_Analysis:
         self.sentiment_analysis = []
         self.emotion_detection = []
         self.keywords = ()
+        self.energy_level = "Low"
     
     def transcribe_audio(self):
         openai.api_key = self.openaikey
@@ -28,6 +31,13 @@ class Audio_Analysis:
         transcription = openai.Audio.transcribe("whisper-1", audio_file)
         self.transcription = transcription["text"]
         self.transcription_array = transcription["text"].split('.')
+
+    def run_energy_detection(self):
+        fs, amplitude = read('audio_file.wav')
+
+        avg_amplitude = np.mean(np.abs(amplitude))
+        if avg_amplitude > 500:
+            self.energy_level = "High"
     
     def run_sentiment_analysis(self):
         sentiment_analysis_results = self.sentiment_analysis_pipeline(self.transcription_array)
@@ -62,14 +72,17 @@ class Audio_Analysis:
     def start_analysis(self):
         self.transcribe_audio()
         
-        sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)
+        #sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)
         emotion_detection_thread = threading.Thread(target=self.run_emotion_detection)
         keyword_detection_thread = threading.Thread(target=self.run_keyword_detection)
+        energy_detection_thread = threading.Thread(target=self.run_energy_detection)
 
-        sentiment_analysis_thread.start()
+        #sentiment_analysis_thread.start()
         emotion_detection_thread.start()
         keyword_detection_thread.start()
+        energy_detection_thread.start()
 
-        sentiment_analysis_thread.join()
+        #sentiment_analysis_thread.join()
         emotion_detection_thread.join()
         keyword_detection_thread.join()
+        energy_detection_thread.join()
