@@ -91,7 +91,6 @@ class Visual_Analysis:
 
         most_common_objects = Counter(detected_objects).most_common(3)
         for object in most_common_objects:
-            print(object[0])
             self.video_detected_objects.append(object[0])
     
     def detect_emotions(self):
