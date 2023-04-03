@@ -1,5 +1,5 @@
 # mood.ai
-This is a program that captures moments into AI generated art!
+Application that captures moments into AI generated art!
 
 # How it works!
 1. Record the moment you would like to capture!
@@ -11,7 +11,8 @@ This is a program that captures moments into AI generated art!
     <li>audio: transcription</li>
     <li>audio: sentiment analysis</li>
     <li>audio: emotion detection from text</li>
-    <li>audio: identifying key words from text</li></ol>
+    <li>audio: identifying key words from text</li>
+    <li>audio: energy level detection</li></ol>
 3. With all the data received from these ML models, Chat GPT generates prompt ideas that encorporates the essence of the moment
 4. DALLE-2 then generates images from those prompts and gives them to you in the "output.html" file for you to enjoy
 
