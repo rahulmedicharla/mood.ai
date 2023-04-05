@@ -12,7 +12,7 @@ class InputParent:
         self.video_input = VideoInput()
         self.audio_input = AudioInput()
 
-        self.RECORDING_LENGTH = 5
+        self.RECORDING_LENGTH = 7
         self.is_recording = False
         self.is_open = True
         self.start_time = 0
@@ -27,7 +27,7 @@ class InputParent:
         self.info_frame = tk.Frame(self.root, width=self.width)
         self.title_text = tk.Label(self.info_frame, text="Welcome to mood.ai!", font=('Helvetica', 14), pady=5)
 
-        self.info_text = tk.Label(self.info_frame, text = "Simply click the button below to begin recording for 5 seconds!", font=('Helvetica', 10), pady=5)
+        self.info_text = tk.Label(self.info_frame, text = "Simply click the button below to begin recording for " + str(self.RECORDING_LENGTH) + " seconds!", font=('Helvetica', 10), pady=5)
 
         self.record_button = tk.Button(self.info_frame, text="Start Recording!", command=self.toggle_recording, font=('Helvetica', 10), pady = 5)
         

@@ -37,8 +37,8 @@ def main():
     audio_analysis_thread.join()
     video_analysis_thread.join()
 
-    #visual_analysis_obj.print_video_results()
-    #audio_analysis_obj.print_audio_results()
+    visual_analysis_obj.print_video_results()
+    audio_analysis_obj.print_audio_results()
 
     #generate output
     print('Creating output...')
@@ -49,7 +49,7 @@ def main():
     web_browser = WebBrowser(ai_generation)
     web_browser.create_webpage()
 
-    clean_up()
+    #clean_up()
 
 
 main()

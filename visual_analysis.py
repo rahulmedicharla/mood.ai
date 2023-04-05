@@ -178,10 +178,14 @@ class Visual_Analysis:
         self.color_list = np.random.uniform(low = 0, high = 255, size = (len(self.classes_list), 3))
     
     def print_video_results(self):
-        print("Objects Detected: " + str(self.video_detected_objects))
-        print("Emotions detected:" + str(self.video_detected_emotions))
-        print("Classification: " + str(self.video_classification))
-        print("Top Colors: " + str(self.video_top_colors))
+        f = open('detection_results.txt', 'a')
+
+        f.write("\nObjects Detected: " + str(self.video_detected_objects))
+        f.write("\nEmotions detected:" + str(self.video_detected_emotions))
+        f.write("\nClassification: " + str(self.video_classification))
+        f.write("\nTop Colors: " + str(self.video_top_colors))
+
+        f.close()
 
     def start_analysis(self):
         try:

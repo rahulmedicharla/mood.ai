@@ -64,25 +64,30 @@ class Audio_Analysis:
 
 
     def print_audio_results(self):
-        print(self.transcription_array)
-        print(self.sentiment_analysis)
-        print(self.emotion_detection)
-        print(self.keywords)
+        f = open('detection_results.txt', 'a')
+
+        f.write("\nTranscription: " + str(self.transcription))
+        f.write("\nSentiment Analysis: " + str(self.sentiment_analysis))
+        f.write("\nEmotion Detection: " + str(self.emotion_detection))
+        f.write("\nKeywords: "   + str(self.keywords))
+        f.write("\nEnergy Level: " + str(self.energy_level))
+
+        f.close()
 
     def start_analysis(self):
         self.transcribe_audio()
         
-        #sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)
+        sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)
         emotion_detection_thread = threading.Thread(target=self.run_emotion_detection)
         keyword_detection_thread = threading.Thread(target=self.run_keyword_detection)
         energy_detection_thread = threading.Thread(target=self.run_energy_detection)
 
-        #sentiment_analysis_thread.start()
+        sentiment_analysis_thread.start()
         emotion_detection_thread.start()
         keyword_detection_thread.start()
         energy_detection_thread.start()
 
-        #sentiment_analysis_thread.join()
+        sentiment_analysis_thread.join()
         emotion_detection_thread.join()
         keyword_detection_thread.join()
         energy_detection_thread.join()
