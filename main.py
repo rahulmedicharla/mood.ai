@@ -49,7 +49,7 @@ def main():
     web_browser = WebBrowser(ai_generation)
     web_browser.create_webpage()
 
-    #clean_up()
+    clean_up()
 
 
 main()
