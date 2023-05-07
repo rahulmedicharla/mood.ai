@@ -1,4 +1,4 @@
-import cv2, threading
+import cv2
 
 class VideoInput:
 

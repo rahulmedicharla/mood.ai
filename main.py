@@ -3,7 +3,7 @@ from visual_analysis import Visual_Analysis
 from audio_analysis import Audio_Analysis
 from ai_generation import Generation
 from generate_webpage import WebBrowser
-import os, threading, time
+import os, threading
 
 VIDEO_PATH = "video_file.mp4"
 AUDIO_PATH = "audio_file.wav"
