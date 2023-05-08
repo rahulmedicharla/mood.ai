@@ -23,7 +23,7 @@ def main():
     ai_generation = Generation(visual_analysis_obj, audio_analysis_obj)
     
     #collecting inupt
-    InputParent()    
+    input_parent = InputParent()
 
     print('Analyzing data...')
     
@@ -42,7 +42,7 @@ def main():
 
     #generate output
     print('Creating output...')
-    ai_generation.generate_chat_prompts()
+    ai_generation.generate_chat_prompts(input_parent.openai_api_key)
     ai_generation.create_images()
 
     #create webpage

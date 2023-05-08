@@ -25,7 +25,7 @@ There are some preliminary steps that first must be completed in order for you t
 3. Activate virtual environment by running
 ```source myenv/bin/activate``` on MacOs or Linux, or 
 ```source myenv/Scripts/activate``` on Windows
-4. Everytime you want to run the program, make sure to activate the virtual environment as this is where all the dependencies for the project will live
+4. Everytime you want to run the program, make sure to activate and virtual environment as this is where all the dependencies for the project will live
 5. Install all dependecies for the project in your virtual environment by running 
 ```pip install -r requirements.txt``` on Windows, and
 ```pip3 install requirements.txt``` on Mac
@@ -33,8 +33,7 @@ There are some preliminary steps that first must be completed in order for you t
 ```python -m spacy download en_core_web_sm``` 
 7. Download the ffmpeg executable from this link and place the exectuable in your root directory of this project
  -> https://ffmpeg.org/download.html
-8. Create a openai api key on the openai website, create a 'keys.py' file in the root directory of this project, and put this as the first line in that file
-```openaikey = "your api key"```
+8. Create a openai api key on the openai website, and have it on hand. You'll need it when running the program
 9. There! you should now be ready to run the program.
 
 # Run the program

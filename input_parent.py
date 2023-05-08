@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox as mb
 from PIL import Image, ImageTk
 from visual_input import VideoInput
 from audio_input import AudioInput
@@ -17,6 +18,9 @@ class InputParent:
         self.is_open = True
         self.start_time = 0
 
+        #openai api key inits
+        self.openai_api_key = ""
+
         #tkinter inits
         self.width = int(self.video_input.FRAME_WIDTH)
         self.height = int(self.video_input.FRAME_HEIGHT)
@@ -27,12 +31,19 @@ class InputParent:
         self.info_frame = tk.Frame(self.root, width=self.width)
         self.title_text = tk.Label(self.info_frame, text="Welcome to mood.ai!", font=('Helvetica', 14), pady=5)
 
-        self.info_text = tk.Label(self.info_frame, text = "Simply click the button below to begin recording for " + str(self.RECORDING_LENGTH) + " seconds!", font=('Helvetica', 10), pady=5)
+        self.info_text = tk.Label(self.info_frame, text = "Simply enter your openai api key and click the button below to begin recording for " + str(self.RECORDING_LENGTH) + " seconds!", font=('Helvetica', 10), pady=5)
 
+        self.openai_key_text = tk.Label(self.info_frame, text = "Openai API key: ")
+        self.openai_key_value = tk.Entry(self.info_frame, width=75)
+        
         self.record_button = tk.Button(self.info_frame, text="Start Recording!", command=self.toggle_recording, font=('Helvetica', 10), pady = 5)
         
         self.title_text.pack()
         self.info_text.pack()
+
+        self.openai_key_text.pack()
+        self.openai_key_value.pack()
+
         self.record_button.pack()
         self.info_frame.pack()
 
@@ -44,10 +55,15 @@ class InputParent:
         self.root.mainloop()
 
     def toggle_recording(self):
-        self.is_recording = True
-        self.record_button.pack_forget()
-        self.start_time = cv2.getTickCount()
-        self.audio_input.start_audio()
+        if self.openai_key_value.get() !=  "":    
+            self.openai_api_key = self.openai_key_value.get()
+            
+            self.is_recording = True
+            self.record_button.pack_forget()
+            self.start_time = cv2.getTickCount()
+            self.audio_input.start_audio()
+        else:
+            mb.showwarning("Invalid API Key", "It looks like you have entered an invalid API key, please try again")
 
     def stop_recording(self):
         try:

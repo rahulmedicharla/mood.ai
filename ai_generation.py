@@ -3,7 +3,7 @@ from queue import Queue
 
 class Generation:
     def __init__(self, video, audio):
-        self.openaikey = keys.openaikey
+        self.openaikey = ""
         self.chat_prompt = """I will give you a bunch of lists. I want you to choose a random item from each of the lists and generate 5 unique prompts that can be used to create AI art. ONLY USE EACH ITEM ONCE. I want each prompt you give to follow a unique and fancy art style different from the others. The first list is a list of captions describing the video. Only use this value in TWO of the prompts generated. The second list is a list of objects. The third list if a list of emotions. the fourth list is a list of colors given in RGB. ONLY for this list you should convert the RGB values to their closest color name and select three colors to use. The fourth list is energy levels, and the fifth list is a list of keywords. I would like at least one prompt to emphasize emotions through color, and at least one prompt be a fully abstracted version of the first list, and use warm colors for a high energy level and cool colors for a low energy level. Use random weights to determine how important a piece of information is for the prompt. Generate titles for each image as well. For some of the prompts follow art styles from famous artists. ONLY GIVE ME THE YOUR RESPONSE IN THE FORMAT ["title 1", "prompt 1", "title 2", "prompt 2", "titile 3", "prompt3"]
 
                             Follow these examples:
@@ -22,12 +22,13 @@ class Generation:
         self.dalle_prompts = []
         self.image_results = []
 
-    def generate_chat_prompts(self):
+    def generate_chat_prompts(self, openaikey):
         emotion_list = list(set(self.video_analysis.video_detected_emotions + self.audio_analysis.emotion_detection))
         if 'sad' in emotion_list:
             emotion_list.remove('sad')
 
-        openai.api_key = self.openaikey
+        openai.api_key = openaikey
+        self.openaikey = openaikey
 
         message = str([self.video_analysis.video_classification,self.video_analysis.video_detected_objects, emotion_list, self.video_analysis.video_top_colors, self.audio_analysis.energy_level, self.audio_analysis.keywords])
 
