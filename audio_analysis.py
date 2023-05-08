@@ -1,5 +1,5 @@
 import openai
-import threading, keys
+import threading
 from transformers import pipeline
 import spacy
 import numpy as np
@@ -13,8 +13,8 @@ class Audio_Analysis:
         self.emotion_detection_pipeline = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
         self.keyword_detection_pipeline = spacy.load('en_core_web_sm')
 
-        #whisper inits
-        self.openaikey = keys.openaikey
+        #whisper inits0
+        self.openaikey = ""
 
         #data inits
         self.audio_path = audio_path
@@ -74,7 +74,8 @@ class Audio_Analysis:
 
         f.close()
 
-    def start_analysis(self):
+    def start_analysis(self, openaikey):
+        self.openaikey = openaikey
         self.transcribe_audio()
         
         sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)

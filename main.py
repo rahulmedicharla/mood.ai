@@ -28,7 +28,7 @@ def main():
     print('Analyzing data...')
     
     #running analysis
-    audio_analysis_thread = threading.Thread(target = audio_analysis_obj.start_analysis())
+    audio_analysis_thread = threading.Thread(target = audio_analysis_obj.start_analysis(input_parent.openai_api_key))
     video_analysis_thread = threading.Thread(target = visual_analysis_obj.start_analysis())
     
     video_analysis_thread.start()
