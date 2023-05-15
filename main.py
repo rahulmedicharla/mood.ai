@@ -14,21 +14,22 @@ CLASSES_PATH = os.path.join("model_data", "coco.names")
 def clean_up():
     os.remove('video_file.mp4')
     os.remove('audio_file.wav')
+    os.remove('movie.mp4')
 
-def main():
+def main(openaikey):
     #init all objects
     print('Initializing objects, getting ready to run...')
     visual_analysis_obj = Visual_Analysis(VIDEO_PATH, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
     audio_analysis_obj = Audio_Analysis(AUDIO_PATH)
     ai_generation = Generation(visual_analysis_obj, audio_analysis_obj)
     
-    #collecting inupt
-    input_parent = InputParent()
+    # #collecting inupt
+    # input_parent = InputParent()
 
     print('Analyzing data...')
     
     #running analysis
-    audio_analysis_thread = threading.Thread(target = audio_analysis_obj.start_analysis(input_parent.openai_api_key))
+    audio_analysis_thread = threading.Thread(target = audio_analysis_obj.start_analysis(openaikey))
     video_analysis_thread = threading.Thread(target = visual_analysis_obj.start_analysis())
     
     video_analysis_thread.start()
@@ -42,14 +43,12 @@ def main():
 
     #generate output
     print('Creating output...')
-    ai_generation.generate_chat_prompts(input_parent.openai_api_key)
+    ai_generation.generate_chat_prompts(openaikey)
     ai_generation.create_images()
 
-    #create webpage
-    web_browser = WebBrowser(ai_generation)
-    web_browser.create_webpage()
-
+    # #create webpage
+    # web_browser = WebBrowser(ai_generation)
+    # web_browser.create_webpage()
     clean_up()
 
-
-main()
+    return ai_generation.image_results

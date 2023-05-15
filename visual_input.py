@@ -3,7 +3,7 @@ import cv2
 class VideoInput:
 
     def __init__(self):
-        self.video_capture_object = cv2.VideoCapture(0);
+        self.video_capture_object = cv2.VideoCapture(0)
 
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         self.video_write_object = cv2.VideoWriter('video_file.mp4', fourcc, 10.0, (640, 480))
@@ -22,4 +22,4 @@ class VideoInput:
     def stop_video(self):
         self.video_capture_object.release()
         self.video_write_object.release()
-        cv2.destroyAllWindows();
+        cv2.destroyAllWindows()
