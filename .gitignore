@@ -1,8 +1,8 @@
 pyenv
-ffmpeg.exe
 __pycache__
 keys.py
 video_file.mp4
 audio_file.wav
 output.html
 detection_results.txt
+ffmpeg.exe
