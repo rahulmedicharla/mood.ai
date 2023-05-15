@@ -1,4 +1,3 @@
-from input_parent import InputParent
 from visual_analysis import Visual_Analysis
 from audio_analysis import Audio_Analysis
 from ai_generation import Generation
