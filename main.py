@@ -1,7 +1,6 @@
 from visual_analysis import Visual_Analysis
 from audio_analysis import Audio_Analysis
 from ai_generation import Generation
-from generate_webpage import WebBrowser
 import os, threading
 
 VIDEO_PATH = "video_file.mp4"
@@ -42,9 +41,6 @@ def main(openaikey):
     ai_generation.generate_chat_prompts(openaikey)
     ai_generation.create_images()
 
-    # #create webpage
-    # web_browser = WebBrowser(ai_generation)
-    # web_browser.create_webpage()
     clean_up()
 
     return ai_generation.image_results
