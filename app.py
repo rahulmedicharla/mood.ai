@@ -35,8 +35,8 @@ if file and openaikey:
     audio.write_audiofile(audio_filename)
     video.write_videofile(video_filename)
 
-    st.text("Generating Art....")
     image_links = main.main(openaikey)
+    st.text("Generating art....")
 
     for image in image_links:
         with st.container():

@@ -8,9 +8,12 @@ from scipy.io.wavfile import read
 class Audio_Analysis:
 
     def __init__(self, audio_path):
+        print("1st init")
         #model inits
         self.sentiment_analysis_pipeline = pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
+        print("2 init")
         self.emotion_detection_pipeline = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
+        print("3st init")
         self.keyword_detection_pipeline = spacy.load('en_core_web_sm')
 
         #whisper inits0
