@@ -3,20 +3,7 @@ import moviepy.editor as mp
 import main
 import requests
 from io import BytesIO
-import os
-from visual_analysis import Visual_Analysis
-from audio_analysis import Audio_Analysis
-from ai_generation import Generation
-
-VIDEO_PATH = "video_file.mp4"
-AUDIO_PATH = "audio_file.wav"
-CONFIG_PATH = os.path.join("model_data", "ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt")
-MODEL_PATH = os.path.join("model_data", "frozen_inference_graph.pb")
-CLASSES_PATH = os.path.join("model_data", "coco.names")
-
-visual_analysis_obj = Visual_Analysis(VIDEO_PATH, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
-audio_analysis_obj = Audio_Analysis(AUDIO_PATH)
-ai_generation = Generation(visual_analysis_obj, audio_analysis_obj)
+from PIL import Image
 
 st.title("Welcome to mood.ai")
 st.header("Store memories as AI generated art")
@@ -52,7 +39,7 @@ if file and openaikey:
         audio.write_audiofile(audio_filename)
         video.write_videofile(video_filename)
 
-        image_links = main.main(openaikey, visual_analysis_obj, audio_analysis_obj, ai_generation)
+        image_links = main.main(openaikey)
         st.text("Generating art....")
         
         for image in image_links:
@@ -60,6 +47,7 @@ if file and openaikey:
                 st.image(image['link'])
                 st.text(image['title'])
                 img = BytesIO(requests.get(image['link']).content)
+                file_name = str(image['title']) + ".png"
 
         generate_art = None
         

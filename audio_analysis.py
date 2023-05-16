@@ -4,15 +4,14 @@ from transformers import pipeline
 import numpy as np
 from scipy.io.wavfile import read
 import streamlit as st
-import copy
 
 class Audio_Analysis:
 
-    @st.cache_resource
-    def get_sentiment_pipeline(_self):
-        return pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
-
     def __init__(self, audio_path):
+        #model inits
+        
+        self.sentiment_analysis_pipeline = pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
+
         #whisper inits
         self.openaikey = ""
 
@@ -36,12 +35,11 @@ class Audio_Analysis:
         fs, amplitude = read('audio_file.wav')
 
         avg_amplitude = np.mean(np.abs(amplitude))
-        if avg_amplitude > 400:
+        if avg_amplitude > 500:
             self.energy_level = "High"
     
-    def run_sentiment_analysis(self, pipeline):
-        
-        sentiment_analysis_results = pipeline(self.transcription_array)
+    def run_sentiment_analysis(self):
+        sentiment_analysis_results = self.sentiment_analysis_pipeline(self.transcription_array)
 
         self.sentiment_analysis = self.convert_analysis_result_to_array(sentiment_analysis_results)
 
@@ -70,7 +68,7 @@ class Audio_Analysis:
             self.openaikey = openaikey
             self.transcribe_audio()
             
-            sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis, args=(copy.deepcopy(self.get_sentiment_pipeline()),))
+            sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)
             energy_detection_thread = threading.Thread(target=self.run_energy_detection)
 
             sentiment_analysis_thread.start()
