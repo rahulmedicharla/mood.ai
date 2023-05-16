@@ -75,20 +75,23 @@ class Audio_Analysis:
         f.close()
 
     def start_analysis(self, openaikey):
-        self.openaikey = openaikey
-        self.transcribe_audio()
-        
-        sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)
-        emotion_detection_thread = threading.Thread(target=self.run_emotion_detection)
-        keyword_detection_thread = threading.Thread(target=self.run_keyword_detection)
-        energy_detection_thread = threading.Thread(target=self.run_energy_detection)
+        try:
+            self.openaikey = openaikey
+            self.transcribe_audio()
+            
+            sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)
+            #emotion_detection_thread = threading.Thread(target=self.run_emotion_detection)
+            #keyword_detection_thread = threading.Thread(target=self.run_keyword_detection)
+            #energy_detection_thread = threading.Thread(target=self.run_energy_detection)
 
-        sentiment_analysis_thread.start()
-        emotion_detection_thread.start()
-        keyword_detection_thread.start()
-        energy_detection_thread.start()
+            sentiment_analysis_thread.start()
+            #emotion_detection_thread.start()
+            #keyword_detection_thread.start()
+            #energy_detection_thread.start()
 
-        sentiment_analysis_thread.join()
-        emotion_detection_thread.join()
-        keyword_detection_thread.join()
-        energy_detection_thread.join()
+            sentiment_analysis_thread.join()
+            #emotion_detection_thread.join()
+            #keyword_detection_thread.join()
+            #energy_detection_thread.join()
+        except Exception as e:
+            print("Audio Exception:" + str(e))

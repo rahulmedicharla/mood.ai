@@ -17,7 +17,7 @@ file = st.file_uploader("Upload File", type = 'mp4')
 st.markdown("")
 
 if file and openaikey:
-    st.text("Analyzing text....")
+    st.text("Analyzing video....")
     with open("movie.mp4", "wb") as f:
         f.write(file.getvalue())
 
