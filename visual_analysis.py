@@ -5,10 +5,13 @@ from fer import FER
 from transformers import pipeline
 from PIL import Image
 from collections import Counter
+import streamlit as st
+import copy
+import tokenizers
 
 
-np.random.seed(20)
 class Visual_Analysis:
+
     def __init__(self, video_path, config_path, model_path, classes_path):
         #object detection inits
         self.video_path = video_path
@@ -23,10 +26,10 @@ class Visual_Analysis:
         self.net.setInputSwapRB(True)
 
         #emotion detection inits
-        self.emotion_detector = FER(mtcnn = True)
+        self.emotion_detector = None
 
         #image classification inits
-        self.image_classification = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
+        self.image_classification = None
 
         #data inits
         self.video_detected_objects = []
@@ -35,6 +38,14 @@ class Visual_Analysis:
         self.video_top_colors = []
 
         self.read_classes()
+
+    @st.cache_resource
+    def get_emotion_detection_model(_self):
+        return FER(mtcnn = True)
+    
+    @st.cache_resource
+    def get_image_classification_pipeline(_self):
+        return pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
 
     def detect_objects(self):
         #uncomment to see analysis
@@ -63,26 +74,17 @@ class Visual_Analysis:
                 for i in range(0, len(bbox_idx)):
 
                     bbox = bboxs[np.squeeze(bbox_idx[i])]
-                    class_confidence = confidence[np.squeeze(bbox_idx[i])]
                     class_label_id = np.squeeze(class_label_ids[np.squeeze(bbox_idx[i])])
                     class_label = self.classes_list[class_label_id]
-                    class_color = [int(c) for c in self.color_list[class_label_id]]
-
-                    display_text = "{}:{:.2f}".format(class_label, class_confidence)
-
+                    
                     if (class_label not in frame_object_list):
                         frame_object_list.append(class_label)
 
                     x,y,w,h = bbox
-
-                    #cv2.rectangle(image, (x,y), (x+w, y+h), color=class_color, thickness = 1)
-                    #cv2.putText(image, display_text, (x,y-10), cv2.FONT_HERSHEY_PLAIN, 1, class_color, 2)
-
             
             for x in frame_object_list:
                 detected_objects.append(x)
             
-            #cv2.imshow("Result", image)
             
             key = cv2.waitKey(1)
 
@@ -102,6 +104,8 @@ class Visual_Analysis:
         (success, image) = cap.read()
 
         emotions_detected = []
+
+        self.emotion_detector = copy.deepcopy(self.get_emotion_detection_model())
 
         while success:
             dominant_emotion, emotion_score = self.emotion_detector.top_emotion(image)
@@ -123,6 +127,7 @@ class Visual_Analysis:
         if cap.isOpened() == False:
             print('error opening file image classification')
 
+        self.image_classification = copy.deepcopy(self.get_image_classification_pipeline())
         
         for i in range(0,5):
             cap.set(cv2.CAP_PROP_POS_FRAMES, cap.get(cv2.CAP_PROP_FRAME_COUNT) - 1)

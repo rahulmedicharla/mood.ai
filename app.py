@@ -5,6 +5,8 @@ import requests
 from io import BytesIO
 from PIL import Image
 
+refs = main.init()
+
 st.title("Welcome to mood.ai")
 st.header("Store memories as AI generated art")
 st.subheader("Simply upload a short clip, enter your openai API key, and watch as AI turns that moment into art")
@@ -16,40 +18,40 @@ st.text("Use a short, max 10s mp4 video clip for best performance")
 file = st.file_uploader("Upload File", type = 'mp4')
 st.markdown("")
 
+generate_art = st.button("Generate Art!")
+st_image_container = st.empty()
+
 if file and openaikey:
-    st.text("Analyzing video....")
-    with open("movie.mp4", "wb") as f:
-        f.write(file.getvalue())
+    if generate_art:
+        st.text("Analyzing video....")
+        with open("movie.mp4", "wb") as f:
+            f.write(file.getvalue())
 
-    # Load the MP4 file
-    video = mp.VideoFileClip("movie.mp4")
+        # Load the MP4 file
+        video = mp.VideoFileClip("movie.mp4")
 
-    # Separate audio and video streams
-    audio = video.audio
-    video = video.without_audio()
+        # Separate audio and video streams
+        audio = video.audio
+        video = video.without_audio()
 
-    # Save audio and video files
-    audio_filename = "audio_file.wav"
-    video_filename = "video_file.mp4"
+        # Save audio and video files
+        audio_filename = "audio_file.wav"
+        video_filename = "video_file.mp4"
 
-    audio.write_audiofile(audio_filename)
-    video.write_videofile(video_filename)
+        audio.write_audiofile(audio_filename)
+        video.write_videofile(video_filename)
 
-    image_links = main.main(openaikey)
-    st.text("Generating art....")
+        image_links = main.main(refs[0], refs[1], refs[2], openaikey)
+        st.text("Generating art....")
+        
+        for image in image_links:
+            with st.container():
+                st.image(image['link'])
+                st.text(image['title'])
+                img = BytesIO(requests.get(image['link']).content)
 
-    for image in image_links:
-        with st.container():
-            st.image(image['link'])
-            st.text(image['title'])
-            img = BytesIO(requests.get(image['link']).content)
-            file_name = str(image['title']) + ".png"
-            st.download_button(
-                label="Download Image",
-                data=img,
-                file_name=file_name,
-                mime='image/png',
-            )
+        generate_art = None
+        
 
 
     
