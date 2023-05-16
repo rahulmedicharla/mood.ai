@@ -39,11 +39,9 @@ class Visual_Analysis:
 
         self.read_classes()
 
-    @st.cache_resource
     def get_emotion_detection_model(_self):
         return FER(mtcnn = True)
     
-    @st.cache_resource
     def get_image_classification_pipeline(_self):
         return pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
 

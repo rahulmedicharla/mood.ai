@@ -24,7 +24,6 @@ class Audio_Analysis:
         self.keywords = ()
         self.energy_level = "Low"
     
-    @st.cache_resource
     def get_sentiment_analysis_pipeline(_self):
         return pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
 
