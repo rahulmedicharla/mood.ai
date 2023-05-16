@@ -190,20 +190,20 @@ class Visual_Analysis:
     def start_analysis(self):
         try:
             print()
-            # obj_detection_thread = threading.Thread(target=self.detect_objects)
-            # emotion_detection_thread = threading.Thread(target=self.detect_emotions)
-            # image_classification_thread = threading.Thread(target=self.classify_video)
-            # color_detection_thread = threading.Thread(target=self.detect_colors)
+            obj_detection_thread = threading.Thread(target=self.detect_objects)
+            emotion_detection_thread = threading.Thread(target=self.detect_emotions)
+            image_classification_thread = threading.Thread(target=self.classify_video)
+            color_detection_thread = threading.Thread(target=self.detect_colors)
             
-            # obj_detection_thread.start()
-            # emotion_detection_thread.start()
-            # image_classification_thread.start()
-            # color_detection_thread.start()
+            obj_detection_thread.start()
+            emotion_detection_thread.start()
+            image_classification_thread.start()
+            color_detection_thread.start()
 
-            # obj_detection_thread.join()
-            # emotion_detection_thread.join()
-            # image_classification_thread.join()
-            # color_detection_thread.join()
+            obj_detection_thread.join()
+            emotion_detection_thread.join()
+            image_classification_thread.join()
+            color_detection_thread.join()
         except Exception as e:
             print("Video Exception: " + e)
 
