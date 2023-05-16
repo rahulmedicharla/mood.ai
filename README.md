@@ -16,7 +16,7 @@ Application that captures moments into AI generated art!
 
 # How to use!
 If you would like to test the application for yourself, check out the link below
-https://rahulmedicharla-mood-ai-app-y2im29.streamlit.app/
+https://rahulmedicharla-mood-ai-app-kjmsoq.streamlit.app/
 
 If you would like to fork and change the program, there are some preliminary steps that first must be completed in order for you to be able to run this program locally
 
