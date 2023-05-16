@@ -12,24 +12,29 @@ import tokenizers
 
 class Visual_Analysis:
 
+    def get_object_detection_model(self, model_path, config_path):
+        net = cv2.dnn_DetectionModel(model_path, config_path)
+        net.setInputSize(320,320)
+        net.setInputScale(1.0/127.5)
+        net.setInputMean((127.5,127.5,127.5))
+        net.setInputSwapRB(True)
+        return net
+    
+    @st.cache_resource
+    def get_emotion_detection_model(_self):
+        return FER(mtcnn=True)
+    
+    @st.cache_resource
+    def get_image_classification_model(_self):
+        return pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
+    
+
     def __init__(self, video_path, config_path, model_path, classes_path):
         #object detection inits
         self.video_path = video_path
         self.config_path = config_path
         self.model_path = model_path
         self.classes_path = classes_path
-
-        self.net = cv2.dnn_DetectionModel(self.model_path, self.config_path)
-        self.net.setInputSize(320,320)
-        self.net.setInputScale(1.0/127.5)
-        self.net.setInputMean((127.5,127.5,127.5))
-        self.net.setInputSwapRB(True)
-
-        #emotion detection inits
-        self.emotion_detector = FER(mtcnn = True)
-
-        #image classification inits
-        self.image_classification = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
 
         #data inits
         self.video_detected_objects = []
@@ -41,6 +46,8 @@ class Visual_Analysis:
 
     
     def detect_objects(self):
+        model = self.get_object_detection_model(self.model_path, self.config_path)
+
         #uncomment to see analysis
         cap = cv2.VideoCapture(self.video_path)
 
@@ -53,7 +60,7 @@ class Visual_Analysis:
         detected_objects = []
 
         while success:
-            class_label_ids, confidence, bboxs = self.net.detect(image, confThreshold = 0.5)
+            class_label_ids, confidence, bboxs = model.detect(image, confThreshold = 0.5)
 
             bboxs = list(bboxs)
             confidence = list(np.array(confidence).reshape(1,-1)[0])
@@ -88,7 +95,7 @@ class Visual_Analysis:
         for object in most_common_objects:
             self.video_detected_objects.append(object[0])
     
-    def detect_emotions(self):
+    def detect_emotions(self, model):
         cap = cv2.VideoCapture(self.video_path)
 
         if cap.isOpened() == False:
@@ -99,7 +106,7 @@ class Visual_Analysis:
         emotions_detected = []
 
         while success:
-            dominant_emotion, emotion_score = self.emotion_detector.top_emotion(image)
+            dominant_emotion, emotion_score = model.top_emotion(image)
 
             emotions_detected.append(dominant_emotion)
 
@@ -112,7 +119,7 @@ class Visual_Analysis:
         for emotion in most_common_emotions:
             self.video_detected_emotions.append(emotion[0])
         
-    def classify_video(self):
+    def classify_video(self, model):
         cap = cv2.VideoCapture(self.video_path)
 
         if cap.isOpened() == False:
@@ -124,7 +131,7 @@ class Visual_Analysis:
         
             pil_image = Image.fromarray(image)
 
-            classification = self.image_classification(pil_image)
+            classification = model(pil_image)
             if classification[0]['generated_text'] not in self.video_classification:
                     self.video_classification.append(classification[0]['generated_text'])
 
@@ -185,8 +192,8 @@ class Visual_Analysis:
         try:
             print()
             obj_detection_thread = threading.Thread(target=self.detect_objects)
-            emotion_detection_thread = threading.Thread(target=self.detect_emotions)
-            image_classification_thread = threading.Thread(target=self.classify_video)
+            emotion_detection_thread = threading.Thread(target=self.detect_emotions, args=(copy.deepcopy(self.get_emotion_detection_model()),))
+            image_classification_thread = threading.Thread(target=self.classify_video, args=(copy.deepcopy(self.get_image_classification_model()),))
             color_detection_thread = threading.Thread(target=self.detect_colors)
             
             obj_detection_thread.start()

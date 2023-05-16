@@ -4,6 +4,8 @@ import main
 import requests
 from io import BytesIO
 
+ref = main.init()
+
 st.title("Welcome to mood.ai")
 st.header("Store memories as AI generated art")
 st.subheader("Simply upload a short clip, enter your openai API key, and watch as AI turns that moment into art")
@@ -38,7 +40,7 @@ if file and openaikey:
         audio.write_audiofile(audio_filename)
         video.write_videofile(video_filename)
 
-        image_links = main.main(openaikey)
+        image_links = main.main(openaikey, ref[0], ref[1], ref[2])
         st.text("Generating art....")
         
         for image in image_links:

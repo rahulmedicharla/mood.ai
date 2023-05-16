@@ -21,12 +21,12 @@ def init():
 
     return [visual_analysis_obj, audio_analysis_obj, ai_generation]
 
-def main(openaikey):
+def main(openaikey, visual_analysis_obj, audio_analysis_obj, ai_generation):
     #init all objects
     print('Initializing objects, getting ready to run...')
-    visual_analysis_obj = Visual_Analysis(VIDEO_PATH, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
-    audio_analysis_obj = Audio_Analysis(AUDIO_PATH)
-    ai_generation = Generation(visual_analysis_obj, audio_analysis_obj)
+    # visual_analysis_obj = Visual_Analysis(VIDEO_PATH, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
+    # audio_analysis_obj = Audio_Analysis(AUDIO_PATH)
+    # ai_generation = Generation(visual_analysis_obj, audio_analysis_obj)
 
     print('Analyzing data...')
     
