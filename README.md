@@ -10,14 +10,15 @@ Application that captures moments into AI generated art!
     <li>video: primary color detection</li>
     <li>audio: transcription</li>
     <li>audio: sentiment analysis</li>
-    <li>audio: emotion detection from text</li>
-    <li>audio: identifying key words from text</li>
     <li>audio: energy level detection</li></ol>
 3. With all the data received from these ML models, Chat GPT generates prompt ideas that encorporates the essence of the moment
-4. DALLE-2 then generates images from those prompts and gives them to you in the "output.html" file for you to enjoy
+4. DALLE-2 then generates images from those prompts and gives them to you to enjoy
 
 # How to use!
-There are some preliminary steps that first must be completed in order for you to be able to run this program
+If you would like to test the application for yourself, check out the link below
+https://rahulmedicharla-mood-ai-app-y2im29.streamlit.app/
+
+If you would like to fork and change the program, there are some preliminary steps that first must be completed in order for you to be able to run this program locally
 
 1. First clone the repo to you local computer, and make sure you have the latest python installed, www.python.org
 2. Generate a virtual environment for this program running this in your terminal,
@@ -29,16 +30,12 @@ There are some preliminary steps that first must be completed in order for you t
 5. Install all dependecies for the project in your virtual environment by running 
 ```pip install -r requirements.txt``` on Windows, and
 ```pip3 install requirements.txt``` on Mac
-6. Install one more dependency by running
-```python -m spacy download en_core_web_sm``` 
-7. Download the ffmpeg executable from this link and place the exectuable in your root directory of this project
- -> https://ffmpeg.org/download.html
-8. Create a openai api key on the openai website, and have it on hand. You'll need it when running the program
+6. Create a openai api key on the openai website, and have it on hand. You'll need it when running the program
 9. There! you should now be ready to run the program.
 
 # Run the program
 To run the program simply type
-```python main.py``` into your terminal
+```streamlit run app.py``` into your terminal
 The program will take a second to boot up. Once the camera is up on your screen, it will start recording automatically and click the 'q' button whenever you are finished. 
 
 The output may take a second to generate the images but enjoy!
