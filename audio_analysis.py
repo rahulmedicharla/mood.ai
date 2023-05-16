@@ -12,9 +12,9 @@ class Audio_Analysis:
         #model inits
         self.sentiment_analysis_pipeline = pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
         print("2 init")
-        self.emotion_detection_pipeline = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
+        #self.emotion_detection_pipeline = pipeline('sentiment-analysis', model='arpanghoshal/EmoRoBERTa')
         print("3st init")
-        self.keyword_detection_pipeline = spacy.load('en_core_web_sm')
+        #self.keyword_detection_pipeline = spacy.load('en_core_web_sm')
 
         #whisper inits0
         self.openaikey = ""
@@ -85,16 +85,16 @@ class Audio_Analysis:
             sentiment_analysis_thread = threading.Thread(target=self.run_sentiment_analysis)
             #emotion_detection_thread = threading.Thread(target=self.run_emotion_detection)
             #keyword_detection_thread = threading.Thread(target=self.run_keyword_detection)
-            #energy_detection_thread = threading.Thread(target=self.run_energy_detection)
+            energy_detection_thread = threading.Thread(target=self.run_energy_detection)
 
             sentiment_analysis_thread.start()
             #emotion_detection_thread.start()
             #keyword_detection_thread.start()
-            #energy_detection_thread.start()
+            energy_detection_thread.start()
 
             sentiment_analysis_thread.join()
             #emotion_detection_thread.join()
             #keyword_detection_thread.join()
-            #energy_detection_thread.join()
+            energy_detection_thread.join()
         except Exception as e:
             print("Audio Exception:" + str(e))
