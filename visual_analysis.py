@@ -190,7 +190,7 @@ class Visual_Analysis:
 
     def start_analysis(self):
         try:
-            print()
+            print("analysis is being run")
             obj_detection_thread = threading.Thread(target=self.detect_objects)
             emotion_detection_thread = threading.Thread(target=self.detect_emotions, args=(copy.deepcopy(self.get_emotion_detection_model()),))
             image_classification_thread = threading.Thread(target=self.classify_video, args=(copy.deepcopy(self.get_image_classification_model()),))
