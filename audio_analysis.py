@@ -11,7 +11,7 @@ class Audio_Analysis:
 
     def __init__(self, audio_path):
         #model inits
-        self.sentiment_analysis_pipeline = None
+        self.sentiment_analysis_pipeline = pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
         #whisper inits
         self.openaikey = ""
 
@@ -23,10 +23,6 @@ class Audio_Analysis:
         self.emotion_detection = []
         self.keywords = ()
         self.energy_level = "Low"
-    
-    def get_sentiment_analysis_pipeline(_self):
-        return pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
-
     
     def transcribe_audio(self):
         openai.api_key = self.openaikey
@@ -43,8 +39,6 @@ class Audio_Analysis:
             self.energy_level = "High"
     
     def run_sentiment_analysis(self):
-        self.sentiment_analysis_pipeline = copy.deepcopy(self.get_sentiment_analysis_pipeline())
-
         sentiment_analysis_results = self.sentiment_analysis_pipeline(self.transcription_array)
 
         self.sentiment_analysis = self.convert_analysis_result_to_array(sentiment_analysis_results)

@@ -3,9 +3,6 @@ import moviepy.editor as mp
 import main
 import requests
 from io import BytesIO
-from PIL import Image
-
-refs = main.init()
 
 st.title("Welcome to mood.ai")
 st.header("Store memories as AI generated art")
@@ -41,7 +38,7 @@ if file and openaikey:
         audio.write_audiofile(audio_filename)
         video.write_videofile(video_filename)
 
-        image_links = main.main(refs[0], refs[1], refs[2], openaikey)
+        image_links = main.main(openaikey)
         st.text("Generating art....")
         
         for image in image_links:

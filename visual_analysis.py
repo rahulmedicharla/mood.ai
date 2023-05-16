@@ -26,10 +26,10 @@ class Visual_Analysis:
         self.net.setInputSwapRB(True)
 
         #emotion detection inits
-        self.emotion_detector = None
+        self.emotion_detector = FER(mtcnn = True)
 
         #image classification inits
-        self.image_classification = None
+        self.image_classification = pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
 
         #data inits
         self.video_detected_objects = []
@@ -39,12 +39,7 @@ class Visual_Analysis:
 
         self.read_classes()
 
-    def get_emotion_detection_model(_self):
-        return FER(mtcnn = True)
     
-    def get_image_classification_pipeline(_self):
-        return pipeline("image-to-text", model="nlpconnect/vit-gpt2-image-captioning")
-
     def detect_objects(self):
         #uncomment to see analysis
         cap = cv2.VideoCapture(self.video_path)
@@ -103,8 +98,6 @@ class Visual_Analysis:
 
         emotions_detected = []
 
-        self.emotion_detector = copy.deepcopy(self.get_emotion_detection_model())
-
         while success:
             dominant_emotion, emotion_score = self.emotion_detector.top_emotion(image)
 
@@ -124,8 +117,6 @@ class Visual_Analysis:
 
         if cap.isOpened() == False:
             print('error opening file image classification')
-
-        self.image_classification = copy.deepcopy(self.get_image_classification_pipeline())
         
         for i in range(0,5):
             cap.set(cv2.CAP_PROP_POS_FRAMES, cap.get(cv2.CAP_PROP_FRAME_COUNT) - 1)
