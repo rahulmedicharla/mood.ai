@@ -56,10 +56,6 @@ class Generation:
                 "title": title,
                 "link": image["data"][0]["url"],
             })
-        
-        f = open('detection_results.txt', 'a')
-        f.write('\n Chat Prompts: ' + title + " : " + prompt)
-        f.close()
     
     
     def create_images(self):
