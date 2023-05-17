@@ -3,13 +3,11 @@ import threading
 from transformers import pipeline
 import numpy as np
 from scipy.io.wavfile import read
-import streamlit as st
 
 class Audio_Analysis:
 
     def __init__(self, audio_path):
         #model inits
-        
         self.sentiment_analysis_pipeline = pipeline('sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
 
         #whisper inits
@@ -26,17 +24,18 @@ class Audio_Analysis:
     
     def transcribe_audio(self):
         openai.api_key = self.openaikey
-        audio_file = open(self.audio_path, "rb")
-        transcription = openai.Audio.transcribe("whisper-1", audio_file)
-        self.transcription = transcription["text"]
-        self.transcription_array = transcription["text"].split('.')
+        with open(self.audio_path, "rb") as audio_file:
+            transcription = openai.Audio.transcribe("whisper-1", audio_file)
+            self.transcription = transcription["text"]
+            self.transcription_array = transcription["text"].split('.')
 
     def run_energy_detection(self):
-        fs, amplitude = read('audio_file.wav')
+        with open(self.audio_path, "rb") as audio_file:
+            fs, amplitude = read(audio_file)
 
-        avg_amplitude = np.mean(np.abs(amplitude))
-        if avg_amplitude > 500:
-            self.energy_level = "High"
+            avg_amplitude = np.mean(np.abs(amplitude))
+            if avg_amplitude > 500:
+                self.energy_level = "High"
     
     def run_sentiment_analysis(self):
         sentiment_analysis_results = self.sentiment_analysis_pipeline(self.transcription_array)

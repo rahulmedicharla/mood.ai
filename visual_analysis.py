@@ -5,8 +5,6 @@ from fer import FER
 from transformers import pipeline
 from PIL import Image
 from collections import Counter
-import streamlit as st
-
 
 class Visual_Analysis:
     def __init__(self, video_path, config_path, model_path, classes_path):
