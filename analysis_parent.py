@@ -16,15 +16,20 @@ def main(video_link, openaikey):
     #separate video and audio
     movie = mp.VideoFileClip(video_link)
     audio = movie.audio
+    video = movie.without_audio()
 
     # Create a temporary file
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as audio_file:
         # Save the audio to the temporary file
-        audio.write_audiofile(temp_file.name, codec ='pcm_s16le')
+        audio.write_audiofile(audio_file.name, codec ='pcm_s16le')
+
+    with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as video_file:
+        # Save the audio to the temporary file
+        video.write_videofile(video_file.name, codec ='libx264')
 
 
-    visual_analysis_obj = Visual_Analysis(video_link, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
-    audio_analysis_obj = Audio_Analysis(temp_file.name)
+    visual_analysis_obj = Visual_Analysis(video_file.name, CONFIG_PATH, MODEL_PATH, CLASSES_PATH)
+    audio_analysis_obj = Audio_Analysis(audio_file.name)
     ai_generation = Generation(visual_analysis_obj, audio_analysis_obj)
 
     print('Analyzing data...')
