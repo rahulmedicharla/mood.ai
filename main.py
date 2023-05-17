@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_restful import Resource, Api
+from flask_cors import CORS
 import analysis_parent
 
 #flask api initializer
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
 
 #api class
 class MoodAi(Resource):
