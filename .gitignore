@@ -1,8 +1,5 @@
 pyenv
 __pycache__
 keys.py
-video_file.mp4
-audio_file.wav
-output.html
-detection_results.txt
 cleanenv
+test_api.py
