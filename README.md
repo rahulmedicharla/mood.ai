@@ -1,8 +1,13 @@
 # mood.ai
-Application that captures moments into AI generated art!
+Mood.ai is a new experimental way to store memories as AI generated art
+
+Check out the link below to try it out foryourself!
+https://mood-ai-coral.vercel.app/
+
 
 # How it works!
-1. Record the moment you would like to capture!
+This repo is the code for a flask API that I put on google cloud run. It handles all the backend ML 
+1. Upload a video of the moment you would like to capture
 2. Program runs video and audio through numerous ML models running in parallel such as\n
     <ol><li>video: multi object detection</li>
     <li>video: facial emotion detection</li>
@@ -14,10 +19,7 @@ Application that captures moments into AI generated art!
 3. With all the data received from these ML models, Chat GPT generates prompt ideas that encorporates the essence of the moment
 4. DALLE-2 then generates images from those prompts and gives them to you to enjoy
 
-# How to use!
-If you would like to test the application for yourself, check out the link below
-https://rahulmedicharla-mood-ai-app-kjmsoq.streamlit.app/
-
+# Customize for your self
 If you would like to fork and change the program, there are some preliminary steps that first must be completed in order for you to be able to run this program locally
 
 1. First clone the repo to you local computer, and make sure you have the latest python installed, www.python.org
