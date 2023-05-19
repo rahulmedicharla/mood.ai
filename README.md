@@ -8,7 +8,7 @@ https://mood-ai-coral.vercel.app/
 # How it works!
 This repo is the code for a flask API that I put on google cloud run. It handles all the backend ML 
 1. Upload a video of the moment you would like to capture
-2. Program runs video and audio through numerous ML models running in parallel such as\n
+2. Program runs video and audio through numerous ML models running in parallel such as
     <ol><li>video: multi object detection</li>
     <li>video: facial emotion detection</li>
     <li>video: image classification</li>
@@ -36,8 +36,8 @@ If you would like to fork and change the program, there are some preliminary ste
 9. There! you should now be ready to run the program.
 
 # Run the program
-To run the program simply type
-```streamlit run app.py``` into your terminal
-The program will take a second to boot up. Once the camera is up on your screen, it will start recording automatically and click the 'q' button whenever you are finished. 
+To run the program you need to have two python terminals open.
+1. On the first terminal run ```python main.py``` to start the local server for the api
+2. On the second terminal run ```python test_api.py``` to test the API call.
 
-The output may take a second to generate the images but enjoy!
+In test_api.py make sure to add your openai api key and a public URL for your test mp4 video
